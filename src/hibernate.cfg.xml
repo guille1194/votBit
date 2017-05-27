@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+  <property name="hibernate.connection.url">jdbc:oracle:thin:@35.167.250.138:1521:xe</property>
+  <property name="hibernate.connection.username">guna</property>
+  <property name="hibernate.connection.password">guna</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
+  <property name="hibernate.connection.autocommit">true</property>
+  <property name="hibernate.current_session_context_class">thread</property>
+  <property name="hibernate.jdbc.use_get_generated_keys">true</property>
+  <mapping resource="tectijuana/votBit/hibernate/Categoria.hbm.xml"/>
+  <mapping resource="tectijuana/votBit/hibernate/Opciones.hbm.xml"/>
+  <mapping resource="tectijuana/votBit/hibernate/Pregunta.hbm.xml"/>
+  <mapping resource="tectijuana/votBit/hibernate/Respuesta.hbm.xml"/>
+  <mapping resource="tectijuana/votBit/hibernate/RespuestaOpciones.hbm.xml"/>
+  <mapping resource="tectijuana/votBit/hibernate/Roles.hbm.xml"/>  
+  <mapping resource="tectijuana/votBit/hibernate/Usuario.hbm.xml"/>    
+    </session-factory>
+</hibernate-configuration>

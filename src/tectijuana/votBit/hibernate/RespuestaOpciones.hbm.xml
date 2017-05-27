@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2/04/2017 09:30:00 AM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="tectijuana.votBit.hibernate.RespuestaOpciones" table="RespuestaOpciones">
+        <id name="id" type="long">
+            <column name="Id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="idUsuario" class="tectijuana.votBit.hibernate.Usuario" fetch="join">
+            <column name="IdUsuario" />
+        </many-to-one>
+        <many-to-one name="idPregunta" class="tectijuana.votBit.hibernate.Pregunta" fetch="join">
+            <column name="IdPregunta" />
+        </many-to-one>
+        <property name="creado" type="java.lang.String">
+            <column name="Creado" />
+        </property>
+        <property name="modificado" type="java.lang.String">
+            <column name="Modificado" />
+        </property>
+        <property name="respuesta" type="java.lang.String">
+            <column name="Respuesta" />
+        </property>
+    </class>
+</hibernate-mapping>

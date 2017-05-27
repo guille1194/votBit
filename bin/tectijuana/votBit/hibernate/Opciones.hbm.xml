@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2/04/2017 09:30:57 AM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="tectijuana.votBit.hibernate.Opciones" table="Opciones">
+        <id name="id" type="long">
+            <column name="Id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="idPregunta" class="tectijuana.votBit.hibernate.Pregunta" fetch="join">
+            <column name="IdPregunta" />
+        </many-to-one>
+        <property name="opcion" type="java.lang.String">
+            <column name="Opcion" />
+        </property>
+        <property name="numOpciones" type="java.lang.Integer">
+            <column name="NumOpciones" />
+        </property>
+    </class>
+</hibernate-mapping>
