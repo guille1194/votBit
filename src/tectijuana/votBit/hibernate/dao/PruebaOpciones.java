@@ -27,8 +27,8 @@ public class PruebaOpciones {
 	{
 		Opciones opciones = new Opciones();
 		Pregunta pregunta = new Pregunta();
-		pregunta.setId(1);
-		opciones.setId(1);
+		pregunta.setId(2);
+		opciones.setId(2);
 		opciones.setIdPregunta(pregunta);
 		opciones.setNumOpciones(4);
 		opciones.setOpcion("1. string, 2. int, 3. float, 4. double");

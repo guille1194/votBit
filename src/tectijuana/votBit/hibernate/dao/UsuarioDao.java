@@ -58,7 +58,7 @@ public class UsuarioDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarUsuario(long valorId) {
+	public static boolean borrarUsuario(Usuario valorId) {
 		boolean estado = true;
 		
 		try {

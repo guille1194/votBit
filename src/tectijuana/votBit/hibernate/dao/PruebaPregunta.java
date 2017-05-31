@@ -27,14 +27,14 @@ public class PruebaPregunta {
 		Pregunta pregunta = new Pregunta();
 		Categoria categoria = new Categoria();
 		Usuario usuario = new Usuario();
-		categoria.setId(1);
+		categoria.setId(2);
 		usuario.setId(1);
-		pregunta.setId(1);
+		pregunta.setId(2);
 		pregunta.setIdCategoria(categoria);
 		pregunta.setCreado("19/05/2017");
 		pregunta.setIdUsuario(usuario);
 		pregunta.setModificado("");
-		pregunta.setTitulo("Hola");
+		pregunta.setTitulo("NullPointerException");
 		
 		PreguntaDao.guardarPregunta(pregunta);
 		

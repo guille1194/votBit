@@ -28,14 +28,14 @@ public class PruebaRespuesta {
 		Respuesta respuesta = new Respuesta();
 		Pregunta pregunta = new Pregunta();
 		Usuario usuario = new Usuario();
-		pregunta.setId(1);
+		pregunta.setId(2);
 		usuario.setId(1);
-		respuesta.setId(1);
+		respuesta.setId(2);
 		respuesta.setCreado("19/05/2017");
 		respuesta.setIdPregunta(pregunta);
 		respuesta.setIdUsuario(usuario);
 		respuesta.setModificado("");
-		respuesta.setRespuesta("Crear objeto");
+		respuesta.setRespuesta("No, pos ni idea");
 		
 		RespuestaDao.guardarRespuesta(respuesta);
 		

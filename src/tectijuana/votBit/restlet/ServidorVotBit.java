@@ -1,6 +1,5 @@
 package tectijuana.votBit.restlet;
 
-import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 

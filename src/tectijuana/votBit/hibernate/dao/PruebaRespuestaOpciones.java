@@ -27,14 +27,14 @@ public class PruebaRespuestaOpciones {
 		RespuestaOpciones respuestaOpciones = new RespuestaOpciones();
 		Pregunta pregunta = new Pregunta();
 		Usuario usuario = new Usuario();
-		usuario.setId(1);
-		pregunta.setId(1);
-		respuestaOpciones.setId(1);
+		usuario.setId(2);
+		pregunta.setId(2);
+		respuestaOpciones.setId(2);
 		respuestaOpciones.setIdPregunta(pregunta);
 		respuestaOpciones.setIdUsuario(usuario);
 		respuestaOpciones.setCreado("19/05/2017");
 		respuestaOpciones.setModificado("");
-		respuestaOpciones.setRespuesta("opcion b");
+		respuestaOpciones.setRespuesta("opcion d");
 		
 		RespuestaOpcionesDao.guardarRespuestaOpciones(respuestaOpciones);
 		

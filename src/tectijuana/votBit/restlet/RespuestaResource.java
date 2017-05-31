@@ -14,42 +14,46 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.restlet.util.Series;
 
-import tectijuana.votBit.hibernate.Categoria;
-import tectijuana.votBit.hibernate.dao.CategoriaDao;
+import tectijuana.votBit.hibernate.Pregunta;
+import tectijuana.votBit.hibernate.Respuesta;
+import tectijuana.votBit.hibernate.Usuario;
+import tectijuana.votBit.hibernate.dao.RespuestaDao;
 
-public class CategoriaResource extends ServerResource {
-
-	public CategoriaResource() {
+public class RespuestaResource extends ServerResource {
+	
+	public RespuestaResource() {
+		
 	}
-
+	
 	@Override
 	protected Representation get() throws ResourceException {
+		// TODO Auto-generated method stub
 		Representation respuesta = null;
 		JSONObject datoJSON = new JSONObject();
-		CategoriaDao categoriaDao = null;
-		List<Categoria> parameters = new ArrayList<Categoria>();
+		RespuestaDao respuestaDao = null;
+		List<Respuesta> parameters = new ArrayList<Respuesta>();
 		Series<Parameter> headers = (Series<Parameter>) getRequest().getAttributes().get("org.restlet.http.headers");
 		String valores = headers.getValues("id");
 		
 		if(valores == null) {
-			categoriaDao = new CategoriaDao();
-			datoJSON.put("Data", categoriaDao.obtenerCategoria());
+			respuestaDao = new RespuestaDao();
+			datoJSON.put("Data", respuestaDao.obtenerRespuesta());
 			datoJSON.put("mensaje", "servicio funcionando");
 		}
 		else {
-			System.out.println(valores);
 			String [] str = valores.split(", ");
-			categoriaDao = new CategoriaDao();
+			respuestaDao = new RespuestaDao();
 			for(String s : str) {
-				parameters.add(categoriaDao.obtenerCategoria(Long.parseLong(s)));
+				parameters.add(respuestaDao.obtenerRespuesta(Long.parseLong(s)));
 			}
 			datoJSON.put("dato", parameters);
 			datoJSON.put("mensaje", "servicio funcionando");
 		}
 		respuesta = new JsonRepresentation(datoJSON);
+		
 		return respuesta;	
 	}
-
+	
 	@Override
 	protected Representation post(Representation entity) throws ResourceException{
 		Representation respuesta = null;
@@ -59,21 +63,42 @@ public class CategoriaResource extends ServerResource {
 		JSONObject datoJSON = null;
 		
 		//Parametros Modelo
-		String NombreCategoria = null;
+		String NombreRespuesta = null;
+		Pregunta NombreIdPregunta = null;
+		Usuario NombreIdUsuario = null;
+		String PreguntaCreado = null;
+		String PreguntaModificado = null;
+		
+		Long idPregunta = null;
+		Long idUsuario = null;
 		
 		try {
 			String text = entity.getText();
 			parametros = new JSONObject(text);
-			NombreCategoria = parametros.getString("nombre");
+			NombreRespuesta = parametros.getString("NombreRespuesta");
+			idPregunta = parametros.getLong("NombreIdPregunta");
+			idUsuario = parametros.getLong("NombreIdUsuario");
+			PreguntaCreado = parametros.getString("PreguntaCreado");
+			PreguntaModificado = parametros.getString("PreguntaModificado");
 			
-			if (NombreCategoria != null) {
+			if (NombreRespuesta != null && idPregunta != null && idUsuario != null && PreguntaCreado != null && PreguntaModificado != null) {
 				System.out.println("Se tratara de agregar nuevo registro.");
 				
-				Categoria categoria = new Categoria();
+				Respuesta respuestas = new Respuesta();
 				
-				categoria.setNombre(NombreCategoria);
-
-				estado = CategoriaDao.guardarCategoria(categoria);
+				NombreIdPregunta = new Pregunta();
+				NombreIdPregunta.setId(idPregunta);
+				
+				NombreIdUsuario = new Usuario();
+				NombreIdUsuario.setId(idUsuario);
+				
+				respuestas.setCreado(PreguntaCreado);
+				respuestas.setIdPregunta(NombreIdPregunta);
+				respuestas.setIdUsuario(NombreIdUsuario);
+				respuestas.setModificado(PreguntaModificado);
+				respuestas.setRespuesta(NombreRespuesta);
+				
+				estado = RespuestaDao.guardarRespuesta(respuestas);
 				
 				if (estado) {
 					mensaje = "Registro agregado.";
@@ -114,22 +139,44 @@ public class CategoriaResource extends ServerResource {
 		JSONObject datoJSON = null;
 		
 		//Parametros Modelo
-		String NombreCategoria = null;
+		String NombreRespuesta = null;
+		Pregunta NombreIdPregunta = null;
+		Usuario NombreIdUsuario = null;
+		String PreguntaCreado = null;
+		String PreguntaModificado = null;
+		
+		Long idPregunta = null;
+		Long idUsuario = null;
 		Long id = null;
 		
 		try {
 			String text = entity.getText();
 			parametros = new JSONObject(text);
-			NombreCategoria = parametros.getString("nombre");
+			NombreRespuesta = parametros.getString("NombreRespuesta");
+			idPregunta = parametros.getLong("NombreIdPregunta");
+			idUsuario = parametros.getLong("NombreIdUsuario");
+			PreguntaCreado = parametros.getString("PreguntaCreado");
+			PreguntaModificado = parametros.getString("PreguntaModificado");
 			id = parametros.getLong("id");
-			if (NombreCategoria != null) {
+			if (NombreRespuesta != null && idPregunta != null && idUsuario != null && PreguntaCreado != null && PreguntaModificado != null) {
 				System.out.println("Se tratara de agregar nuevo registro.");
 				
-				Categoria categoria = new Categoria();
-				categoria.setId(id);
-				categoria.setNombre(NombreCategoria);
+				Respuesta respuestas = new Respuesta();
+				
+				NombreIdPregunta = new Pregunta();
+				NombreIdPregunta.setId(idPregunta);
+				
+				NombreIdUsuario = new Usuario();
+				NombreIdUsuario.setId(idUsuario);
+				
+				respuestas.setId(id);
+				respuestas.setCreado(PreguntaCreado);
+				respuestas.setIdPregunta(NombreIdPregunta);
+				respuestas.setIdUsuario(NombreIdUsuario);
+				respuestas.setModificado(PreguntaModificado);
+				respuestas.setRespuesta(NombreRespuesta);
 
-				estado = CategoriaDao.actualizarCategoria(categoria);
+				estado = RespuestaDao.guardarRespuesta(respuestas);
 				
 				if (estado) {
 					mensaje = "Registro agregado.";
@@ -161,12 +208,12 @@ public class CategoriaResource extends ServerResource {
 
 		return respuesta;
 	}
-	
+
 	@Override
 	protected Representation delete() throws ResourceException {
 		Representation respuesta = null;
 		Form forma = null;
-		String idCategoria = null;
+		String idRespuesta = null;
 		Boolean estado = null;
 		Long Id = null;
 		String mensaje = null;
@@ -174,13 +221,13 @@ public class CategoriaResource extends ServerResource {
 		
 		try {
 			forma = this.getQuery();
-			idCategoria = forma.getValues("id");
-			System.out.println("Voy a borrar categoria con id " + idCategoria);
-			if (idCategoria != null) {
-				Id = Long.parseLong(idCategoria);
-				Categoria categoria = new Categoria();
-				categoria.setId(Id);
-				estado = CategoriaDao.borrarCategoria(categoria);
+			idRespuesta = forma.getValues("id");
+			System.out.println("Voy a borrar respuesta con id " + idRespuesta);
+			if (idRespuesta != null) {
+				Id = Long.parseLong(idRespuesta);
+				Respuesta respuestas = new Respuesta();
+				respuestas.setId(Id);
+				estado = RespuestaDao.borrarRespuesta(respuestas);
 				if (estado) {
 					mensaje = "Registro borrado";
 				} else {
@@ -188,7 +235,7 @@ public class CategoriaResource extends ServerResource {
 				}
 			} else {
 				estado = false;
-				mensaje = "No se envio ID categoria";
+				mensaje = "No se envio ID respuesta";
 			} 
 			
 		} catch (Exception e) {
@@ -205,5 +252,5 @@ public class CategoriaResource extends ServerResource {
 		
 		return respuesta;
 	}
-
+	
 }

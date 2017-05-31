@@ -58,7 +58,7 @@ public class CategoriaDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarCategoria(long valorId) {
+	public static boolean borrarCategoria(Categoria valorId) {
 		boolean estado = true;
 		
 		try {

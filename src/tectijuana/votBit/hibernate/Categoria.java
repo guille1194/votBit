@@ -1,5 +1,7 @@
 package tectijuana.votBit.hibernate;
 
+import org.json.JSONObject;
+
 public class Categoria {
 	private long id;
 	private String nombre;
@@ -18,5 +20,10 @@ public class Categoria {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public JSONObject toJSON() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

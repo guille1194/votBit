@@ -27,13 +27,13 @@ public class PruebaUsuario {
 		Usuario usuario = new Usuario();
 		Roles roles = new Roles();
 		roles.setId(2);
-		usuario.setId(1);
+		usuario.setId(2);
 		usuario.setTipoRoles(roles);
-		usuario.setContrasena("holamundo");
-		usuario.setCorreo("holamundo@hola.com");
-		usuario.setEdad("01/11/1994");
-		usuario.setNombre("Guillermo");
-		usuario.setPerfil("Administrador");
+		usuario.setContrasena("holajuan");
+		usuario.setCorreo("holajuan@hola.com");
+		usuario.setEdad("10/04/1994");
+		usuario.setNombre("Juan");
+		usuario.setPerfil("Usuario");
 		
 		
 		UsuarioDao.guardarUsuario(usuario);
@@ -46,7 +46,8 @@ public class PruebaUsuario {
 				
 		//UsuarioDao.borrarUsuario(usuario);
 		//Desplegar(UsuarioDao.obtenerUsuario(usuario.getId()).toString());
-		
+		System.out.println("22222222222222222222222222222222222222");
+
 		//usuario.setNombre("Jorge");
 		//UsuarioDao.actualizarUsuario(usuario);
 	}

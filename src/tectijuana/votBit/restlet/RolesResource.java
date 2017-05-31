@@ -26,7 +26,6 @@ public class RolesResource extends ServerResource {
 	
 	@Override
 	protected Representation get() throws ResourceException {
-		// TODO Auto-generated method stub
 		Representation respuesta = null;
 		JSONObject datoJSON = new JSONObject();
 		RolesDao rolesDao = null;
@@ -53,37 +52,163 @@ public class RolesResource extends ServerResource {
 		return respuesta;
 		
 	}
-
+	
 	@Override
-	protected Representation post(Representation entity) throws ResourceException {
-		
-		//Falta obtener el representation
+	protected Representation post(Representation entity) throws ResourceException{
 		Representation respuesta = null;
-		JSONObject datoJSON = new JSONObject();
-		RolesDao rolesDao = null;
-		Roles roles = new Roles();
+		JSONObject parametros = null;
+		Boolean estado = null;
+		String mensaje = null;
+		JSONObject datoJSON = null;
+		
+		//Parametros Modelo
+		String NombreRoles = null;
+		
 		try {
-			String dato = entity.getText();
-			roles.setEstatus(dato);
-			rolesDao = new RolesDao();
-			rolesDao.guardarRoles(roles);
-			datoJSON.put("Objeto Insertado", "hehe");
+			String text = entity.getText();
+			parametros = new JSONObject(text);
+			NombreRoles = parametros.getString("estatus");
+			
+			if (NombreRoles != null) {
+				System.out.println("Se tratara de agregar nuevo registro.");
+				
+				Roles roles = new Roles();
+				
+				roles.setEstatus(NombreRoles);
+
+				estado = RolesDao.guardarRoles(roles);
+				
+				if (estado) {
+					mensaje = "Registro agregado.";
+				} else {
+					mensaje = "Registro no agregado.";
+				} 
+			} else {
+				estado = false;
+				mensaje = "Falto enviar algun valor.";
+			} 
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			estado = false;
+			mensaje = "Error en el servicio JSON.";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			estado = false;
+			mensaje = "Error en el servicio.";
+		} finally {
+			// TODO: handle finally clause
+			datoJSON = new JSONObject();
+			datoJSON.put("estado", estado);
+			datoJSON.put("mensaje", mensaje);
+
 			respuesta = new JsonRepresentation(datoJSON);
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		return respuesta;
 	}
 	
 	@Override
-	protected Representation put(Representation entity) throws ResourceException {
-		return super.delete();
+	public Representation put(Representation entity) throws ResourceException {
+		Representation respuesta = null;
+		JSONObject parametros = null;
+		Boolean estado = null;
+		String mensaje = null;
+		JSONObject datoJSON = null;
+		
+		//Parametros Modelo
+		String NombreRoles = null;
+		Long id = null;
+		
+		try {
+			String text = entity.getText();
+			parametros = new JSONObject(text);
+			NombreRoles = parametros.getString("estatus");
+			id = parametros.getLong("id");
+			if (NombreRoles != null) {
+				System.out.println("Se tratara de agregar nuevo registro.");
+				
+				Roles roles = new Roles();
+				roles.setId(id);
+				roles.setEstatus(NombreRoles);
+
+				
+				estado = RolesDao.actualizarRoles(roles);
+				
+				if (estado) {
+					mensaje = "Registro agregado.";
+				} else {
+					mensaje = "Registro no agregado.";
+				} 
+			} else {
+				estado = false;
+				mensaje = "Falto enviar algun valor.";
+			} 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			estado = false;
+			mensaje = "Error en el servicio.";
+		} catch (JSONException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			estado = false;
+			mensaje = "Error en el servicio JSON.";
+		} finally {
+			// TODO: handle finally clause
+			datoJSON = new JSONObject();
+			datoJSON.put("estado", estado);
+			datoJSON.put("mensaje", mensaje);
+
+			respuesta = new JsonRepresentation(datoJSON);
+		}
+
+		return respuesta;
 	}
 	
 	@Override
 	protected Representation delete() throws ResourceException {
-		return super.delete();
+		Representation respuesta = null;
+		Form forma = null;
+		String idRoles = null;
+		Boolean estado = null;
+		Long Id = null;
+		String mensaje = null;
+		JSONObject datoJSON = null;
+		
+		try {
+			forma = this.getQuery();
+			idRoles = forma.getValues("id");
+			System.out.println("Voy a borrar roles con id " + idRoles);
+			if (idRoles != null) {
+				Id = Long.parseLong(idRoles);
+				Roles roles = new Roles();
+				roles.setId(Id);
+				estado = RolesDao.borrarRoles(roles);
+				if (estado) {
+					mensaje = "Registro borrado";
+				} else {
+					mensaje = "Registro no borrado";
+				}
+			} else {
+				estado = false;
+				mensaje = "No se envio ID roles";
+			} 
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			estado = false;
+			mensaje = "Error en el servicio.";
+		} finally{
+			datoJSON = new JSONObject();
+			datoJSON.put("estado", estado);
+			datoJSON.put("mensaje", mensaje);
+
+			respuesta = new JsonRepresentation(datoJSON);
+		}
+		
+		return respuesta;
 	}
+
+	
 }

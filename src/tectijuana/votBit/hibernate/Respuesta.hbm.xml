@@ -6,7 +6,7 @@
     <class name="tectijuana.votBit.hibernate.Respuesta" table="Respuesta">
         <id name="id" type="long">
             <column name="Id" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <many-to-one name="idUsuario" class="tectijuana.votBit.hibernate.Usuario" fetch="join">
             <column name="IdUsuario" />

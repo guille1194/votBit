@@ -59,7 +59,7 @@ public class OpcionesDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarOpciones(long valorId) {
+	public static boolean borrarOpciones(Opciones valorId) {
 		boolean estado = true;
 		
 		try {

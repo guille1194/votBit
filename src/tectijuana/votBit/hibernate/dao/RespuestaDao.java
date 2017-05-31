@@ -59,7 +59,7 @@ public class RespuestaDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarRespuesta(long valorId) {
+	public static boolean borrarRespuesta(Respuesta valorId) {
 		boolean estado = true;
 		
 		try {

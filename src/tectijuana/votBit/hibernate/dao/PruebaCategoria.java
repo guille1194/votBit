@@ -25,8 +25,8 @@ public class PruebaCategoria {
 	public static void PruebasCategoria()
 	{
 		Categoria categoria = new Categoria();
-		categoria.setId(2);
-		categoria.setNombre("Java");
+		//categoria.setId(2);
+		//categoria.setNombre("Java");
 		
 		CategoriaDao.guardarCategoria(categoria);
 		
