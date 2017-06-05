@@ -58,12 +58,14 @@ public class UsuarioDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarUsuario(Usuario valorId) {
+	public static boolean borrarUsuario(long valorId) {
 		boolean estado = true;
+		Usuario dato = null;
 		
 		try {
+			dato = obtenerUsuario(valorId);
 			iniciar();
-			obtenerSesion().delete(valorId);
+			obtenerSesion().delete(dato);
 			cometerTransacciones();
 			System.out.println("Usuario borrado");
 

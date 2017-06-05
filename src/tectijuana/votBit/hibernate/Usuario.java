@@ -1,5 +1,7 @@
 package tectijuana.votBit.hibernate;
 
+import org.json.JSONObject;
+
 public class Usuario {
 
 	private long id;
@@ -66,5 +68,18 @@ public class Usuario {
 		Edad = edad;
 	}
 	
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		
+		json.put("id", this.id);
+		json.put("nombre", this.nombre);
+		json.put("edad", this.Edad);
+		json.put("correo", this.correo);
+		json.put("perfil", this.perfil);
+		json.put("contrasena", this.contrasena);
+		json.put("tipo roles", this.tipoRoles);
+
+		return json;
+}
 	
 }

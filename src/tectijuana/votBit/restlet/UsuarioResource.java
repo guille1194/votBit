@@ -1,130 +1,124 @@
 package tectijuana.votBit.restlet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Form;
-import org.restlet.data.Parameter;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-import org.restlet.util.Series;
 
 import tectijuana.votBit.hibernate.Roles;
 import tectijuana.votBit.hibernate.Usuario;
+import tectijuana.votBit.hibernate.dao.RolesDao;
 import tectijuana.votBit.hibernate.dao.UsuarioDao;
 
 public class UsuarioResource extends ServerResource {
-	
+
 	public UsuarioResource() {
-		
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
-	protected Representation get() throws ResourceException {
-		// TODO Auto-generated method stub
+	public Representation delete() throws ResourceException {
 		Representation respuesta = null;
-		JSONObject datoJSON = new JSONObject();
-		UsuarioDao usuarioDao = null;
-		List<Usuario> parameters = new ArrayList<Usuario>();
-		Series<Parameter> headers = (Series<Parameter>) getRequest().getAttributes().get("org.restlet.http.headers");
-		String valores = headers.getValues("id");
-		
-		if(valores == null) {
-			usuarioDao = new UsuarioDao();
-			datoJSON.put("Data", usuarioDao.obtenerUsuario());
-			datoJSON.put("mensaje", "servicio funcionando");
-		}
-		else {
-			String [] str = valores.split(", ");
-			usuarioDao = new UsuarioDao();
-			for(String s : str) {
-				parameters.add(usuarioDao.obtenerUsuario(Long.parseLong(s)));
-			}
-			datoJSON.put("dato", parameters);
-			datoJSON.put("mensaje", "servicio funcionando");
-		}
-		respuesta = new JsonRepresentation(datoJSON);
-		
-		return respuesta;
-		
-	}
-	
-	@Override
-	protected Representation post(Representation entity) throws ResourceException{
-		Representation respuesta = null;
-		JSONObject parametros = null;
+		Form forma = null;
+		String idUsuario = null;
 		Boolean estado = null;
+		Long id = null;
 		String mensaje = null;
 		JSONObject datoJSON = null;
-		
-		//Parametros Modelo
-		String NombreUsuario = null;
-		String ContrasenaUsuario = null;
-		String CorreoUsuario = null;
-		String EdadUsuario = null;
-		String PerfilUsuario = null;
-		Roles NombreIdRoles = null;
-		
-		Long idRoles = null;
-		
-		try {
-			String text = entity.getText();
-			parametros = new JSONObject(text);
-			NombreUsuario = parametros.getString("nombre");
-			ContrasenaUsuario = parametros.getString("contrasena");
-			CorreoUsuario = parametros.getString("correo");
-			EdadUsuario = parametros.getString("edad");
-			PerfilUsuario = parametros.getString("perfil");
-			idRoles = parametros.getLong("tipoRoles");
-			
-			if (NombreUsuario != null && ContrasenaUsuario != null && CorreoUsuario != null && EdadUsuario != null && PerfilUsuario != null && idRoles != null) {
-				System.out.println("Se tratara de agregar nuevo registro.");
-				
-				Usuario usuario = new Usuario();
-				
-				NombreIdRoles = new Roles();
-				NombreIdRoles.setId(idRoles);
-				
-				usuario.setContrasena(ContrasenaUsuario);
-				usuario.setCorreo(CorreoUsuario);
-				usuario.setEdad(EdadUsuario);
-				usuario.setPerfil(PerfilUsuario);
-				usuario.setNombre(NombreUsuario);
 
-				estado = UsuarioDao.guardarUsuario(usuario);
-				
+		try {
+			forma = this.getQuery();
+			idUsuario = forma.getValues("id");
+			System.out.println("Voy a borrar Usuario con Id " + idUsuario);
+			if (idUsuario != null) {
+				id = Long.parseLong(idUsuario);
+
+				estado = UsuarioDao.borrarUsuario(id);
+
 				if (estado) {
-					mensaje = "Registro agregado.";
+					mensaje = "Registro borrado";
 				} else {
-					mensaje = "Registro no agregado.";
-				} 
+					mensaje = "Registro no borrado";
+				}
 			} else {
 				estado = false;
-				mensaje = "Falto enviar algun valor.";
-			} 
+				mensaje = "No se envio Id Usuario";
+			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			estado = false;
-			mensaje = "Error en el servicio JSON.";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mensaje = "Error en el servicio.";
+		} catch (Exception e) {
 			estado = false;
 			mensaje = "Error en el servicio.";
 		} finally {
-			// TODO: handle finally clause
 			datoJSON = new JSONObject();
 			datoJSON.put("estado", estado);
 			datoJSON.put("mensaje", mensaje);
 
 			respuesta = new JsonRepresentation(datoJSON);
 		}
+
+		return respuesta;
+	}
+
+	@Override
+	public Representation get() throws ResourceException {
+		Representation respuesta = null;
+		Form forma = null;
+		String idUsuario = null;
+		Boolean estado = null;
+		Long id = null;
+		String mensaje = null;
+		JSONObject datoJSON = null;
+
+		try {
+			forma = this.getQuery();
+			idUsuario = forma.getValues("id");
+			if (idUsuario != null) {
+				System.out.println("Voy a obtener Usuario con Id " + idUsuario);
+				id = Long.parseLong(idUsuario);
+
+				Usuario usuario = UsuarioDao.obtenerUsuario(id);
+
+				if (usuario != null) {
+					datoJSON = usuario.toJSON();
+				} else {
+					estado = false;
+					mensaje = "No existe un Usuario para el id " + id.toString();
+				}
+			} else {
+				List<Usuario> usuarios = (ArrayList<Usuario>) UsuarioDao.obtenerUsuario();
+
+				String textoJson = "{\"usuario\":[";
+				for (Usuario usuario : usuarios) {
+					textoJson += usuario.toJSON().toString() + ",";
+				}
+				textoJson += "]}";
+				System.out.println(textoJson);
+				datoJSON = new JSONObject(textoJson);
+			}
+		} catch (JSONException e) {
+			estado = false;
+			mensaje = "Error en el servicio de JSON.";
+		} catch (Exception e) {
+			estado = false;
+			mensaje = "Error en el servicio o id no valido.";
+		} finally {
+			if (datoJSON == null) {
+				datoJSON = new JSONObject();
+				datoJSON.put("estado", estado);
+				datoJSON.put("mensaje", mensaje);
+			}
+
+			respuesta = new JsonRepresentation(datoJSON);
+		}
+
 		return respuesta;
 	}
 
@@ -135,121 +129,141 @@ public class UsuarioResource extends ServerResource {
 		Boolean estado = null;
 		String mensaje = null;
 		JSONObject datoJSON = null;
-		
-		//Parametros Modelo
-		String NombreUsuario = null;
-		String ContrasenaUsuario = null;
-		String CorreoUsuario = null;
-		String EdadUsuario = null;
-		String PerfilUsuario = null;
-		Roles NombreIdRoles = null;
-		
-		Long idRoles = null;
+		Usuario usuario = null;
+
+		// Parametros de entidad.
 		Long id = null;
-		
+		String nombre = null;
+		String perfil = null;
+		String Edad = null;
+		String correo = null;
+		String contrasena = null;
+		Roles tipoRoles = null;
+
 		try {
-			String text = entity.getText();
-			parametros = new JSONObject(text);
-			NombreUsuario = parametros.getString("nombre");
-			ContrasenaUsuario = parametros.getString("contrasena");
-			CorreoUsuario = parametros.getString("correo");
-			EdadUsuario = parametros.getString("edad");
-			PerfilUsuario = parametros.getString("perfil");
-			idRoles = parametros.getLong("tipoRoles");
-			id = parametros.getLong("id");
-			if (NombreUsuario != null && ContrasenaUsuario != null && CorreoUsuario != null && EdadUsuario != null && PerfilUsuario != null && idRoles != null) {
+			// Obtener y asignar valores para nueva entidad.
+			parametros = new JSONObject(entity.getText());
+
+			if (parametros.has("id")) {
+
+				id = parametros.getLong("id");
+				nombre = parametros.getString("nombre");
+				perfil = parametros.getString("perfil");
+				Edad = parametros.getString("edad");
+				correo = parametros.getString("correo");
+				contrasena = parametros.getString("contrasena");
+				tipoRoles = RolesDao.obtenerRoles(parametros.getLong("tipoRoles"));
+				
+
+				if (id != null && nombre != null && perfil != null && Edad != null && correo != null && contrasena != null && tipoRoles != null) {
+					System.out.println("Se tratara de actualizar registro.");
+
+					usuario = new Usuario();
+					usuario.setId(id);
+					usuario.setNombre(nombre);
+					usuario.setContrasena(contrasena);
+					usuario.setCorreo(correo);
+					usuario.setEdad(Edad);
+					usuario.setPerfil(perfil);
+					usuario.setTipoRoles(tipoRoles);
+
+					estado = UsuarioDao.actualizarUsuario(usuario);
+
+					if (estado) {
+						mensaje = "Registro actualizado.";
+					} else {
+						mensaje = "Registro no actualizado.";
+					}
+				} else {
+					estado = false;
+					mensaje = "Falto enviar algun valor.";
+				}
+			} else {
+				estado = false;
+				mensaje = "Falto enviar id de Usuario.";
+			}
+		} catch (JSONException e) {
+			System.out.println(e.toString());
+			estado = false;
+			mensaje = "Error en el servicio JSON.";
+		} catch (Exception e) {
+			estado = false;
+			mensaje = "Error en el servicio.";
+		} finally {
+			datoJSON = new JSONObject();
+			datoJSON.put("estado", estado);
+			datoJSON.put("mensaje", mensaje);
+
+			respuesta = new JsonRepresentation(datoJSON);
+		}
+
+		return respuesta;
+	}
+
+	@Override
+	public Representation post(Representation entity) throws ResourceException {
+		Representation respuesta = null;
+		JSONObject parametros = null;
+		Boolean estado = null;
+		String mensaje = null;
+		JSONObject datoJSON = null;
+		Usuario usuario = null;
+
+		// Parametros de entidad.
+		String nombre = null;
+		String perfil = null;
+		String Edad = null;
+		String correo = null;
+		String contrasena = null;
+		Roles tipoRoles = null;
+		try {
+			// Obtener y asignar valores para nueva entidad.
+			parametros = new JSONObject(entity.getText());
+			nombre = parametros.getString("nombre");
+			perfil = parametros.getString("perfil");
+			Edad = parametros.getString("edad");
+			correo = parametros.getString("correo");
+			contrasena = parametros.getString("contrasena");
+			tipoRoles = RolesDao.obtenerRoles(parametros.getLong("tipoRoles"));
+
+
+			if (nombre != null && perfil != null && Edad != null && correo != null && contrasena != null && tipoRoles != null) {
 				System.out.println("Se tratara de agregar nuevo registro.");
-								
-				Usuario usuario = new Usuario();
-				
-				NombreIdRoles = new Roles();
-				NombreIdRoles.setId(idRoles);
-				
-				usuario.setId(id);
-				usuario.setContrasena(ContrasenaUsuario);
-				usuario.setCorreo(CorreoUsuario);
-				usuario.setEdad(EdadUsuario);
-				usuario.setPerfil(PerfilUsuario);
-				usuario.setNombre(NombreUsuario);
-				
+
+				usuario = new Usuario();
+				usuario.setNombre(nombre);
+				usuario.setContrasena(contrasena);
+				usuario.setCorreo(correo);
+				usuario.setEdad(Edad);
+				usuario.setPerfil(perfil);
+				usuario.setTipoRoles(tipoRoles);
 
 
 				estado = UsuarioDao.guardarUsuario(usuario);
-				
+
 				if (estado) {
 					mensaje = "Registro agregado.";
 				} else {
 					mensaje = "Registro no agregado.";
-				} 
-			} else {
-				estado = false;
-				mensaje = "Falto enviar algun valor.";
-			} 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			estado = false;
-			mensaje = "Error en el servicio.";
-		} catch (JSONException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			estado = false;
-			mensaje = "Error en el servicio JSON.";
-		} finally {
-			// TODO: handle finally clause
-			datoJSON = new JSONObject();
-			datoJSON.put("estado", estado);
-			datoJSON.put("mensaje", mensaje);
-
-			respuesta = new JsonRepresentation(datoJSON);
-		}
-
-		return respuesta;
-	}
-	
-	@Override
-	protected Representation delete() throws ResourceException {
-		Representation respuesta = null;
-		Form forma = null;
-		String idUsuario = null;
-		Boolean estado = null;
-		Long Id = null;
-		String mensaje = null;
-		JSONObject datoJSON = null;
-		
-		try {
-			forma = this.getQuery();
-			idUsuario = forma.getValues("id");
-			System.out.println("Voy a borrar respuesta con id " + idUsuario);
-			if (idUsuario != null) {
-				Id = Long.parseLong(idUsuario);
-				Usuario usuario = new Usuario();
-				usuario.setId(Id);
-				estado = UsuarioDao.borrarUsuario(usuario);
-				if (estado) {
-					mensaje = "Registro borrado";
-				} else {
-					mensaje = "Registro no borrado";
 				}
 			} else {
 				estado = false;
-				mensaje = "No se envio ID respuesta";
-			} 
-			
+				mensaje = "Falto enviar algun valor.";
+			}
+		} catch (JSONException e) {
+			estado = false;
+			mensaje = "Error en el servicio JSON.";
 		} catch (Exception e) {
-			// TODO: handle exception
 			estado = false;
 			mensaje = "Error en el servicio.";
-		} finally{
+		} finally {
 			datoJSON = new JSONObject();
 			datoJSON.put("estado", estado);
 			datoJSON.put("mensaje", mensaje);
 
 			respuesta = new JsonRepresentation(datoJSON);
 		}
-		
+
 		return respuesta;
 	}
-
-
 }

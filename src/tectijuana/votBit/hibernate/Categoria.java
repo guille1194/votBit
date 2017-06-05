@@ -23,7 +23,10 @@ public class Categoria {
 	}
 	
 	public JSONObject toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+			JSONObject json = new JSONObject();
+			
+			json.put("id", this.id);
+			json.put("nombre", this.nombre);
+			return json;
 	}
 }

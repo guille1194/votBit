@@ -58,12 +58,14 @@ public class PreguntaDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarPregunta(Pregunta valorId) {
+	public static boolean borrarPregunta(long valorId) {
 		boolean estado = true;
+		Pregunta dato = null;
 		
 		try {
+			dato = obtenerPregunta(valorId);
 			iniciar();
-			obtenerSesion().delete(valorId);
+			obtenerSesion().delete(dato);
 			cometerTransacciones();
 			System.out.println("Pregunta borrada");
 

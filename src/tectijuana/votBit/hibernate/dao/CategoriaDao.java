@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import tectijuana.votBit.hibernate.Categoria;
+import tectijuana.votBit.hibernate.Roles;
 
 public class CategoriaDao extends DAO {
 	public static List<Categoria> obtenerCategoria() {
@@ -58,12 +59,14 @@ public class CategoriaDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarCategoria(Categoria valorId) {
+	public static boolean borrarCategoria(long valorId) {
 		boolean estado = true;
+		Categoria dato = null;
 		
 		try {
+			dato = obtenerCategoria(valorId);
 			iniciar();
-			obtenerSesion().delete(valorId);
+			obtenerSesion().delete(dato);
 			cometerTransacciones();
 			System.out.println("Categoria borrada");
 		}
@@ -73,7 +76,7 @@ public class CategoriaDao extends DAO {
 		}
 		return estado;
 	}
-	
+		
 	public static boolean actualizarCategoria(Categoria valorDato){
 		boolean estado = true;
 		try {

@@ -59,12 +59,14 @@ public class OpcionesDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarOpciones(Opciones valorId) {
+	public static boolean borrarOpciones(long valorId) {
 		boolean estado = true;
+		Opciones dato = null;
 		
 		try {
+			dato = obtenerOpciones(valorId);
 			iniciar();
-			obtenerSesion().delete(valorId);
+			obtenerSesion().delete(dato);
 			cometerTransacciones();
 			System.out.println("Opciones borrado");
 		}

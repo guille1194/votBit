@@ -58,12 +58,14 @@ public class RolesDao extends DAO {
 		return estado;
 	}
 	
-	public static boolean borrarRoles(Roles valorId) {
+	public static boolean borrarRoles(long valorId) {
 		boolean estado = true;
+		Roles dato = null;
 		
 		try {
+			dato = obtenerRoles(valorId);
 			iniciar();
-			obtenerSesion().delete(valorId);
+			obtenerSesion().delete(dato);
 			cometerTransacciones();
 			System.out.println("Roles borrado");
 		}

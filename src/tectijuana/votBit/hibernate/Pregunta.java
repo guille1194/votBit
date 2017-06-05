@@ -1,5 +1,7 @@
 package tectijuana.votBit.hibernate;
 
+import org.json.JSONObject;
+
 public class Pregunta {
 	private long id;
 	private Usuario idUsuario;
@@ -54,6 +56,18 @@ public class Pregunta {
 
 	public void setModificado(String modificado) {
 		this.modificado = modificado;
+	}
+	
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		
+		json.put("id", this.id);
+		json.put("id usuario", this.idUsuario);
+		json.put("id categoria", this.idCategoria);
+		json.put("titulo", this.titulo);
+		json.put("creado", this.creado);
+		json.put("modificado", this.modificado);
+		return json;
 	}
 	
 }

@@ -24,7 +24,10 @@ public class Roles {
 	}
 
 	public JSONObject toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject json = new JSONObject();
+		
+		json.put("id", this.id);
+		json.put("estatus", this.estatus);
+		return json;
 	}
 }

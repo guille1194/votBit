@@ -46,7 +46,7 @@ public class PruebaRoles {
 		//RolesDao.actualizarRoles(roles);
 		
 		//borrar
-		RolesDao.borrarRoles(roles);
+		RolesDao.borrarRoles(1);
 		
 		//Desplegar(RolesDao.obtenerRoles(roles.getId()).toString());
 		
